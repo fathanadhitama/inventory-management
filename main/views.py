@@ -1,10 +1,10 @@
 from django.shortcuts import render
 
 # Create your views here.
-def show_main(request):
-    context = {
-        'nama' : 'Fathan Naufal Adhitama',
-        'kelas' : 'PBP E'
-    }
+context = {
+    'nama' : 'Fathan Naufal Adhitama',
+    'kelas' : 'PBP E'
+}
 
+def show_main(request):
     return render(request, "main.html", context)
