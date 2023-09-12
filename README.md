@@ -139,11 +139,11 @@ python manage.py migrate && gunicorn inventory_management.wsgi
 ```
 6. Masukkan nama aplikasi, kemudian centang opsi `HTTP Listener on PORT` dan klik `Deploy App`.
 
-===
+***
 ## Bagan
 ![alt text](src/bagan.jpg "Bagan")
 
-===
+***
 
 ## Mengapa menggunakan virtual environment?
 - **_Virtual environment_** (lingkungan virtual) berfungsi untuk memisahkan pengaturan dan package yang diinstal pada setiap proyek Django sehingga perubahan yang dilakukan pada satu proyek tidak mempengaruhi proyek lainnya.
@@ -151,7 +151,7 @@ python manage.py migrate && gunicorn inventory_management.wsgi
 - Karena sifat terisolasinya tadi, `virtual environment` dapat digunakan untuk membuat environment sendiri untuk tujuan **_testing_** dan **_development_** sehingga perubahan pada satu proyek tidak akan berpengaruh pada proyek lain.
 - Selain itu, `virtual environment` juga berguna untuk kepentingan dalam aspek **_Security_**, **_Version Control_**, dan **_Deployment_**.
 
-===
+***
 
 ## MVC, MVT, MVVM
 **MVC, MVT, dan MVVM** adalah pola arsitektur yang biasa digunakan dalam pengembangan aplikasi berbasis pemrograman untuk menyusun proyek yang terorganisasi dengan baik sehingga mempermudah proses _development_ maupun _maintenance_. Secara garis besar, mereka dapat didefinisikan sebagai berikut:
