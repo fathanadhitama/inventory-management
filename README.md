@@ -162,11 +162,11 @@ python manage.py migrate && gunicorn inventory_management.wsgi
 - Controller: menangani dan memproses input user, dan mengkoordinasikan **Model** dan **View**
 2. **MVT (Model-View-Template)**:
 
-MVT adalah salah satu turunan dari struktur MVC (Model-View-Controller), perbedaannya terletak pada:
+   MVT adalah salah satu turunan dari struktur MVC (Model-View-Controller), perbedaannya terletak pada:
 - Template: memisahkan kode HTML dari logika aplikasi, merancang tampilan yang akhirnya akan diisi dengan data dari model melalui view
 3. **MVVM (Model-View-ViewModel)**:
 
- MVVM juga tidak berbeda jauh dengan pola arsitektur MVC dan MVT, perbedaannya terletak pada fungsinya yang memisahkan antara _business logic_ dan _data presentation logic_ (Views atau UI):
+    MVVM juga tidak berbeda jauh dengan pola arsitektur MVC dan MVT, perbedaannya terletak pada fungsinya yang memisahkan antara _business logic_ dan _data presentation logic_ (Views atau UI):
 - ViewModel: mengelola presentasi data, logika tampilan, dan user input. Mengubah data dari **Model** menjadi format yang dapat ditampilkan oleh **View**
 
 Sehingga, perbedaan utama dari ketiganya adalah MVC menggunakan Controller untuk _handle_ input user, MVT menggunakan Template untuk merancang kode HTML yang ingin ditampilkan, MVVM menggunakan ViewModel untuk memisahkan _business logic_ dan tampilan/User Interface.
