@@ -138,3 +138,32 @@ Terakhir, dilakukan deployment pada Adaptable dengan langkah-langkah berikut.
 python manage.py migrate && gunicorn inventory_management.wsgi
 ```
 6. Masukkan nama aplikasi, kemudian centang opsi `HTTP Listener on PORT` dan klik `Deploy App`.
+
+===
+## Bagan
+![alt text](src/bagan.jpg "Bagan")
+
+===
+
+## Mengapa menggunakan virtual environment?
+- **_Virtual environment_** (lingkungan virtual) berfungsi untuk memisahkan pengaturan dan package yang diinstal pada setiap proyek Django sehingga perubahan yang dilakukan pada satu proyek tidak mempengaruhi proyek lainnya.
+- Dengan memisahkan tiap proyek Django di `virtualenv`-nya masing-masing, **package** dan **dependencies** tiap proyek akan terisolasi dan tidak akan terganggu karena mengalami konflik dengan **package** dan **dependencies** dari proyek Django lain.
+- Karena sifat terisolasinya tadi, `virtual environment` dapat digunakan untuk membuat environment sendiri untuk tujuan **_testing_** dan **_development_** sehingga perubahan pada satu proyek tidak akan berpengaruh pada proyek lain.
+- Selain itu, `virtual environment` juga berguna untuk kepentingan dalam aspek **_Security_**, **_Version Control_**, dan **_Deployment_**.
+
+===
+
+## MVC, MVT, MVVM
+**MVC, MVT, dan MVVM** adalah pola arsitektur yang biasa digunakan dalam pengembangan aplikasi berbasis pemrograman untuk menyusun proyek yang terorganisasi dengan baik sehingga mempermudah proses _development_ maupun _maintenance_. Secara garis besar, mereka dapat didefinisikan sebagai berikut:
+1. **MVC (Model-View-Controller)**:
+- Model: menghubungkan aplikasi dengan basis data dan mengatur interaksi dengan data tersebut.
+- View: mengontrol bagaimana data yang dikelola oleh model akan ditampilkan kepada pengguna.
+- Controller: menangani dan memproses input user, dan mengkoordinasikan **Model** dan **View**
+2. **MVT (Model-View-Template)**:
+...MVT adalah salah satu turunan dari struktur MVC (Model-View-Controller), perbedaannya terletak pada:
+- Template: memisahkan kode HTML dari logika aplikasi, merancang tampilan yang akhirnya akan diisi dengan data dari model melalui view
+3. **MVVM (Model-View-ViewModel)**:
+... MVVM juga tidak berbeda jauh dengan pola arsitektur MVC dan MVT, perbedaannya terletak pada fungsinya yang memisahkan antara _business logic_ dan _data presentation logic_ (Views atau UI):
+- ViewModel: mengelola presentasi data, logika tampilan, dan user input. Mengubah data dari **Model** menjadi format yang dapat ditampilkan oleh **View**
+
+Sehingga, perbedaan utama dari ketiganya adalah MVC menggunakan Controller untuk _handle_ input user, MVT menggunakan Template untuk merancang kode HTML yang ingin ditampilkan, MVVM menggunakan ViewModel untuk memisahkan _business logic_ dan tampilan/User Interface.
