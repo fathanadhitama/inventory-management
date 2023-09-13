@@ -141,7 +141,7 @@ python manage.py migrate && gunicorn inventory_management.wsgi
 
 ***
 ## Bagan
-![alt text](src/bagan.jpg "Bagan")
+![Bagan](src/bagan.jpg "Bagan")
 
 ***
 
@@ -170,3 +170,9 @@ python manage.py migrate && gunicorn inventory_management.wsgi
 - ViewModel: mengelola presentasi data, logika tampilan, dan user input. Mengubah data dari **Model** menjadi format yang dapat ditampilkan oleh **View**
 
 Sehingga, perbedaan utama dari ketiganya adalah MVC menggunakan Controller untuk _handle_ input user, MVT menggunakan Template untuk merancang kode HTML yang ingin ditampilkan, MVVM menggunakan ViewModel untuk memisahkan _business logic_ dan tampilan/User Interface.
+
+***
+## Bonus
+Implementasi 4 _testing_ dasar pada file `tests.py` untuk menguji _response_ tampilan dari HTML agar sesuai dengan ketentuan tugas.
+
+![Testing Bonus](src/tests.png "Hasil Testing")
