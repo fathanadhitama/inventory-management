@@ -227,20 +227,22 @@ Implementasi 4 _testing_ dasar pada file `tests.py` untuk menguji _response_ tam
     from django.http import HttpResponse
     from django.core import serializers
    ```
-   > `serializers` digunakan untuk translate objek model menjadi format lain
-   2. Untuk mengembalikan semua objek yang ada, tambahkan fungsi untuk mengambil semua objek dari `Item` dan mengembalikannya dalam format yang diinginkan menggunakan `HttpResponse` dan `serializers`.
+
+   2. Untuk mengembalikan semua objek yang ada, tambahkan fungsi untuk mengambil semua objek dari `Item` dan mengembalikannya dalam format yang diinginkan menggunakan `HttpResponse` dan `serializers`. <br>
      - JSON
      ```python
      def show_json(request):
         data = Item.objects.all()
         return HttpResponse(serializers.serialize("json", data), content_type="application/json")
      ```
+
      - XML
      ```python
      def show_xml(request):
         data = Item.objects.all()
         return HttpResponse(serializers.serialize("xml", data), content_type="application/xml")
      ```
+
      - HTML
      ```python
      def show_main(request):
@@ -253,6 +255,7 @@ Implementasi 4 _testing_ dasar pada file `tests.py` untuk menguji _response_ tam
         }
         return render(request, "main.html", context)
      ```
+
      3. Untuk menampilkan objek sesuai ID, tambahkan fungsi untuk mengambil objek-objek `Item` yang telah difilter berdasarkan input ID yang akan didapatkan dari URL kemudian dikembalikan dalam bentuk `HttpResponse` setelah diserialisasi menjadi format yang diinginkan menggunakan `serializers`
      - XML
      ```python 
@@ -260,6 +263,7 @@ Implementasi 4 _testing_ dasar pada file `tests.py` untuk menguji _response_ tam
         data = Item.objects.filter(pk=id)
         return HttpResponse(serializers.serialize("xml", data), content_type="application/xml")
      ```
+
      - JSON
      ```python 
      def show_json_by_id(request, id):
