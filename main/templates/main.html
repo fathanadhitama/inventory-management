@@ -1,6 +1,39 @@
-<h1>Manage.it</h1>
+{% extends 'base.html' %}
 
-<h5>Name: </h5>
-<p>{{nama}}</p>
-<h5>Class: </h5>
-<p>{{kelas}}</p>
+{% block content %}
+    <h1>Manage.it</h1>
+
+    <h5>Name: </h5>
+    <p>{{nama}}</p>
+    <h5>Class: </h5>
+    <p>{{kelas}}</p>
+
+    <h2>Anda memiliki {{items.count}} item di gudang.</h2>
+    <table border="1px solid black" style="border-collapse: collapse;">
+        <tr>
+            <th>Name</th>
+            <th>Category</th>
+            <th>Amount</th>
+            <th>Price</th>
+            <th>Description</th>
+        </tr>
+
+        {% for item in items %}
+            <tr>
+                <td>{{item.name}}</td>
+                <td>{{item.category}}</td>
+                <td>{{item.amount}}</td>
+                <td>{{item.price}}</td>
+                <td style="width: 200px; word-wrap: break-word;">{{item.description}}</td>
+            </tr>
+        {% endfor %}
+    </table>
+
+    <br />
+
+    <a href="{% url 'main:create_item' %}">
+        <button>
+            Add New Item
+        </button>
+    </a>
+{% endblock content %}

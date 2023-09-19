@@ -1,5 +1,4 @@
 from django.test import TestCase, Client
-from main.views import context
 
 # Create your tests here.
 class mainTest(TestCase):
@@ -14,9 +13,9 @@ class mainTest(TestCase):
     #Testing to check if name exist in the web page
     def test_name_exists(self):
         response = Client().get('/main/')
-        self.assertContains(response, context['nama'])
+        self.assertContains(response, response.context["nama"])
 
     #Testing to check if class name exist in the web page
     def test_class_exists(self):
         response = Client().get('/main/')
-        self.assertContains(response, context['kelas'])
+        self.assertContains(response, response.context["kelas"])

@@ -2,7 +2,13 @@
 > Manage.it is a web application for shops to manage their sellings, records every transaction, look up shop's statistics and many more. This app is built with django
 
 > You can access the app on [https://manage-it.adaptable.app/main/](https://manage-it.adaptable.app/main/)
+
+### Documentation:
+- **[Tugas 2](#tugas-2)**<br>
+- **[Tugas 3](#tugas-3)**<br>
+
 ***
+# Tugas 2
 # This is how I make it 👇
 
 ## Membuat proyek Django baru
@@ -176,3 +182,121 @@ Sehingga, perbedaan utama dari ketiganya adalah MVC menggunakan Controller untuk
 Implementasi 4 _testing_ dasar pada file `tests.py` untuk menguji _response_ tampilan dari HTML agar sesuai dengan ketentuan tugas.
 
 ![Testing Bonus](src/tests.png "Hasil Testing")
+
+***
+
+# Tugas 3
+
+## Form `POST` dan `GET` dalam Django?
+   1. **Form POST**
+      Pada form dengan method `POST`, data akan dikirim melalui HTTP Request Body dan tidak dapat dilihat secara langsung melalui URL sehingga data akan lebih aman dalam proses pengirimannya.
+   2. **Form `GET`**
+      Sedangkan pada form dengan method `GET`, data akan dikirim melalui URL sehingga dengan mudah dilihat dan data akan lebih terekspos. Selain itu, panjang data juga terbatas sesuai dengan aturan batas panjang URL Address.
+
+    Pada praktiknya, form dengan method `POST` biasanya digunakan untuk mengirim data yang akan berubah pada server, sedangkan form dengan method `GET` biasanya digunakan untuk mengambil data dari server (contoh: mengambil hasil pencarian dari server.)
+
+## Perbedaan utama XML, JSON, dan HTML dalam konteks pengiriman data?
+   1. **XML**
+      Tidak didesain untuk men-*display* data, melainkan untuk membawa dan mengirim data yang bersifat _human-readable_ dan _machine-readable_. XML tidak mendukung array, tetapi mendukung tipe data **_namespace_**
+   2. **JSON**
+      Format data ringkas yang terdiri dari _key and value pairs_. _Syntax_ dari JSON mirip dengan objek dalam javascript. Secara ukuran, JSON lebih ringan dibanding XML. JSON tidak mendukung tipe data **_namespace_**, tetapi mendukung array.
+   3. **HTML**
+      _Markup Language_ yang didesain khusus untuk menampilkan konten web, bukan untuk pengiriman data antaraplikasi/server.
+
+## Mengapa JSON sering digunakan dalam pertukaran data antara aplikasi web modern?
+   JSON lebih sering dipilih sebagai format untuk pertukaran data antara aplikasi web modern karena keunggulan-keunggulannya dibanding format lain, yaitu sebagai berikut:
+   - **Keringanan data**
+     Seperti yang sudah dijelaskan pada poin sebelumnya, JSON memiliki ukuran yang lebih ringan dibanding dengan XML sehingga dapat meningkatkan kecepatan dan efisiensi data transfer.
+   -  **_Human-readability_**
+     Dengan format _key and value pairs_, data lebih mudah dibaca dan dipahami oleh manusia.
+   -  **Dukungan yang luas**
+     Hampir semua bahasa pemrograman modern telah mendukung _parsing_ dan _serializing_ format data JSON. Sehingga format JSON dapat digunakan untuk berkomunikasi dengan banyak teknologin dan bahasa pemrograman yang berbeda.
+   - **Kecocokan dengan RESTful API**
+     Format JSON cocok dengan _REST architectural style_ yang populer di kalangan pengembangan web modern.
+
+## Implementasi Checklist
+   ### Membuat input form untuk menambahkan objek Item
+   1. Membuat file `forms.py`untuk membuat _forms_ sesuai model `Item` menggunakan Django `ModelForm`
+   2. Membuat function `create_item` untuk mengatur implementasi _forms_ yang sudah dibuat tadi.
+   3. Mengonfigurasi url pada file `urls.py` untuk mengakses function `create_item`.
+   4. Membuat tampilan forms dalam file `create_item.html`.
+
+   ### 5 fungsi views untuk melihat objek dalam format XML, JSON, HTML.
+   1. Dalam file `views.py`, tambahkan import berikut
+   ```python
+    from django.http import HttpResponse
+    from django.core import serializers
+   ```
+   > `serializers` digunakan untuk translate objek model menjadi format lain
+   2. Untuk mengembalikan semua objek yang ada, tambahkan fungsi untuk mengambil semua objek dari `Item` dan mengembalikannya dalam format yang diinginkan menggunakan `HttpResponse` dan `serializers`.
+     - JSON
+     ```python
+     def show_json(request):
+        data = Item.objects.all()
+        return HttpResponse(serializers.serialize("json", data), content_type="application/json")
+     ```
+     - XML
+     ```python
+     def show_xml(request):
+        data = Item.objects.all()
+        return HttpResponse(serializers.serialize("xml", data), content_type="application/xml")
+     ```
+     - HTML
+     ```python
+     def show_main(request):
+        items = Item.objects.all()
+
+        context = {
+            'nama': 'Fathan Naufal Adhitama',
+            'kelas': 'PBP E',
+            'items': items
+        }
+        return render(request, "main.html", context)
+     ```
+     3. Untuk menampilkan objek sesuai ID, tambahkan fungsi untuk mengambil objek-objek `Item` yang telah difilter berdasarkan input ID yang akan didapatkan dari URL kemudian dikembalikan dalam bentuk `HttpResponse` setelah diserialisasi menjadi format yang diinginkan menggunakan `serializers`
+     - XML
+     ```python 
+     def show_xml_by_id(request, id):
+        data = Item.objects.filter(pk=id)
+        return HttpResponse(serializers.serialize("xml", data), content_type="application/xml")
+     ```
+     - JSON
+     ```python 
+     def show_json_by_id(request, id):
+        data = Item.objects.filter(pk=id)
+        return HttpResponse(serializers.serialize("json", data), content_type="application/json")
+     ```
+
+## Membuat routing URL
+   1. Pada file `urls.py`, import semua function yang sudah dibuat pada poin sebelumnya.
+   ```python
+   from main.views import show_main, create_item, show_json,show_xml, show_json_by_id, show_xml_by_id
+   ``` 
+   2. Kemudian, tambahkan _path_ untuk mengakses masing-masing fungsi.
+   ```python
+   ...,
+    path('', show_main,name='show_main'),
+    path('json/', show_json, name="show_json"),
+    path('xml/', show_xml, name="show_xml"),
+   ...
+   ``` 
+   Untuk function yang membutuhkan ID dari URL, path ditambahkan seperti berikut:
+   ```python
+   ...,
+    path('xml/<int:id>/', show_xml_by_id, name='show_xml_by_id'),
+    path('json/<int:id>/', show_json_by_id, name='show_json_by_id'),
+   ...
+   ``` 
+   > `path` dengan format di atas dapat diakses dengan memasukkan format URL seperti: `http://localhost:8000/xml/[id]`
+
+## Akses URL menggunakan POSTMAN
+1. XML
+![XML Response](src/xml.png "XML Response")
+2. JSON
+![JSON Response](src/json.png "JSON Response")
+3. HTML
+![HTML Response](src/html.png "HTML Response")
+4. XML by ID
+![XML Response](src/xml-id.png "XML by ID Response")
+5. JSON by ID
+![JSON Response](src/json-id.png "JSON by ID Response")
