@@ -256,7 +256,7 @@ Implementasi 4 _testing_ dasar pada file `tests.py` untuk menguji _response_ tam
              return render(request, "main.html", context)
           ```
 
-     3. Untuk menampilkan objek sesuai ID, tambahkan fungsi untuk mengambil objek-objek `Item` yang telah difilter berdasarkan input ID yang akan didapatkan dari URL kemudian dikembalikan dalam bentuk `HttpResponse` setelah diserialisasi menjadi format yang diinginkan menggunakan `serializers`
+   3. Untuk menampilkan objek sesuai ID, tambahkan fungsi untuk mengambil objek-objek `Item` yang telah difilter berdasarkan input ID yang akan didapatkan dari URL kemudian dikembalikan dalam bentuk `HttpResponse` setelah diserialisasi menjadi format yang diinginkan menggunakan `serializers`
           - XML
              ```python 
              def show_xml_by_id(request, id):
