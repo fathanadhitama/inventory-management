@@ -257,19 +257,19 @@ Implementasi 4 _testing_ dasar pada file `tests.py` untuk menguji _response_ tam
           ```
 
      3. Untuk menampilkan objek sesuai ID, tambahkan fungsi untuk mengambil objek-objek `Item` yang telah difilter berdasarkan input ID yang akan didapatkan dari URL kemudian dikembalikan dalam bentuk `HttpResponse` setelah diserialisasi menjadi format yang diinginkan menggunakan `serializers`
-       - XML
-          ```python 
-          def show_xml_by_id(request, id):
-             data = Item.objects.filter(pk=id)
-             return HttpResponse(serializers.serialize("xml", data), content_type="application/xml")
-          ```
+          - XML
+             ```python 
+             def show_xml_by_id(request, id):
+                data = Item.objects.filter(pk=id)
+                return HttpResponse(serializers.serialize("xml", data), content_type="application/xml")
+             ```
 
-       - JSON
-          ```python 
-          def show_json_by_id(request, id):
-             data = Item.objects.filter(pk=id)
-             return HttpResponse(serializers.serialize("json", data), content_type="application/json")
-          ```
+          - JSON
+             ```python 
+             def show_json_by_id(request, id):
+                data = Item.objects.filter(pk=id)
+                return HttpResponse(serializers.serialize("json", data), content_type="application/json")
+             ```
 
 ## Membuat routing URL
    1. Pada file `urls.py`, import semua function yang sudah dibuat pada poin sebelumnya.
