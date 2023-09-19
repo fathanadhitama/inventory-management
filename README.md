@@ -193,7 +193,7 @@ Implementasi 4 _testing_ dasar pada file `tests.py` untuk menguji _response_ tam
    2. **Form `GET`**
       Sedangkan pada form dengan method `GET`, data akan dikirim melalui URL sehingga dengan mudah dilihat dan data akan lebih terekspos. Selain itu, panjang data juga terbatas sesuai dengan aturan batas panjang URL Address.
 
-    Pada praktiknya, form dengan method `POST` biasanya digunakan untuk mengirim data yang akan berubah pada server, sedangkan form dengan method `GET` biasanya digunakan untuk mengambil data dari server (contoh: mengambil hasil pencarian dari server.)
+   Pada praktiknya, form dengan method `POST` biasanya digunakan untuk mengirim data yang akan berubah pada server, sedangkan form dengan method `GET` biasanya digunakan untuk mengambil data dari server (contoh: mengambil hasil pencarian dari server.)
 
 ## Perbedaan utama XML, JSON, dan HTML dalam konteks pengiriman data?
    1. **XML**
