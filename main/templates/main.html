@@ -1,5 +1,31 @@
 {% extends 'base.html' %}
 
+{% block meta %}
+<title>
+    Home
+</title>
+<style>
+    table{
+        border: 1px solid black;
+        border-collapse: collapse;
+    }
+
+    th,td{
+        padding: 0.2rem;
+        max-width: 200px;
+        word-wrap: break-word;
+        border: 1px solid black;
+        text-align: center;
+    }
+
+    .edit{
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 5px;
+    }
+</style>
+{% endblock meta %}
+
 {% block content %}
     <h1>Manage.it</h1>
 
@@ -9,13 +35,14 @@
     <p>{{kelas}}</p>
 
     <h2>Anda memiliki {{items.count}} item di gudang.</h2>
-    <table border="1px solid black" style="border-collapse: collapse;">
+    <table>
         <tr>
             <th>Name</th>
             <th>Category</th>
             <th>Amount</th>
             <th>Price</th>
             <th>Description</th>
+            <th>Option</th>
         </tr>
 
         {% for item in items %}
@@ -24,16 +51,42 @@
                 <td>{{item.category}}</td>
                 <td>{{item.amount}}</td>
                 <td>{{item.price}}</td>
-                <td style="width: 200px; word-wrap: break-word;">{{item.description}}</td>
+                <td>{{item.description}}</td>
+                <td>
+                    <div class="edit">
+                        <button onclick="location.href='{% url 'main:add_amount' item.id %}'">
+                            +
+                        </button>
+                        {% if item.amount == 0 %}
+                        <button onclick="location.href='{% url 'main:reduce_amount' item.id %}'" disabled>
+                            -
+                        </button>
+                        {% else %}
+                        <button onclick="location.href='{% url 'main:reduce_amount' item.id %}'">
+                            -
+                        </button>
+                        {% endif %}
+                    </div>
+                    <button onclick="location.href='{% url 'main:delete' item.id %}'">
+                        Delete
+                    </button>
+                </td>
             </tr>
         {% endfor %}
     </table>
 
     <br />
+    <h5>Sesi terakhir login: {{ last_login }}</h5>
 
     <a href="{% url 'main:create_item' %}">
         <button>
             Add New Item
+        </button>
+    </a>
+
+    <a href="{% url 'main:logout' %}">
+        <button>
+            Logout
         </button>
     </a>
 {% endblock content %}

@@ -6,6 +6,7 @@
 ### Documentation:
 - **[Tugas 2](#tugas-2)**<br>
 - **[Tugas 3](#tugas-3)**<br>
+- **[Tugas 4](#tugas-4)**<br>
 
 ***
 # Tugas 2
@@ -304,3 +305,153 @@ Implementasi 4 _testing_ dasar pada file `tests.py` untuk menguji _response_ tam
 ![XML Response](src/xml-id.png "XML by ID Response")
 5. JSON by ID
 ![JSON Response](src/json-id.png "JSON by ID Response")
+
+***
+
+# Tugas 4
+
+##  UserCreationForm
+
+`UserCreationForm` adalah _built-in form_ yang diimpor dari `django.contrib.auth.forms`, berfungsi untuk membantu kita membuat formulir pendaftaran `User` di Web yang kita buat. Dengan bantuan `UserCreationForm`, kita tidak perlu menulis kode tambahan lagi untuk melakukan pendaftaran `User` baru di web seperti validasi password.
+- **Kelebihan** dari `UserCreationForm` ini di antaranya adalah :
+   1. Mempermudah pendaftaran user baru
+   2. Validasi input yang sesuai
+   3. Terintegrasi dengan object `User`
+   4. Relatif mudah untuk digunakan.
+- **Kekurangan**nya adalah:
+   1. Memiliki tampilan standar
+   2. Fungsi fitur yang terbatas
+   3. _Error message customization_
+
+## Authentication & Authorization
+Perbedaan utama antara **otentikasi** dan **otorisasi** di Django adalah:
+- **Otentikasi (_Authentication_)** bertujuan untuk melakukan verifikasi identitas user. Metode yang biasanya dilakukan adalah melalui username, password, atau email.
+- Sementara **Otorisasi (_Authorization_)** bertujuan untuk menentukan kewenangan/akses apa saja yang bisa dilakukan oleh user yang telah ter-otentikasi. Misalnya, user dengan kategori `mahasiswa` hanya bisa melihat nilai, sedangkan user dengan kategori `dosen` dapat meng-_upload_ dan mengubah nilai. Tahap **otorisasi** ini bisa dilakukan setelah proses **otentikasi** selesai dilakukan
+
+Kedua tahap ini merupakan faktor yang penting dalam sebuah aplikasi karena keduanya sangat krusial dalam hal keamanan pada sebuah aplikasi agar tidak sembarangan orang dapat mengakses data terutama yang bersifat sensitif.
+
+## Apa itu _Cookies_?
+Cookies adalah tempat penyimpanan kecil yang disimpan di browser pengguna dan digunakan untuk menyimpan informasi yang dapat diakses oleh server di halaman web tersebut. Cookies biasanya digunakan untuk: Authentication, User tracking, and Maintaining user preferences
+
+Untuk mengelola data di _client-side_, Django menggunakan cookies untuk melakukan proses _authentication & authorization_ yang bernama **cookie-based user sessions**. Hal ini dilakukan dengan menyimpan _Session ID_ di dalam cookies untuk dapat melakukan _holding state_ pada HTTP yang _stateless_.
+
+## Apakah _Cookies_ aman?
+Secara default, _cookies_ berfungsi untuk menyimpan informasi di dalam browser dan aman untuk digunakan dalam _web development_. Akan tetapi, tentu saja ada risiko potensial yang dapat terjadi apabila tidak berhati-hati dalam penggunaan _cookies_. Contohnya adalah **_Cookies Poisoning_** yang bertujuan untuk mengubah data pada _cookies_ dan mendapatkan akses ke dalam website. 
+
+## Implementasi Checklist
+### Implementasi fungsi register, login, logout
+#### Register
+1. Membuat fungsi dan form untuk register dengan menggunakan `UserCreationForm` yang diimpor dari `django.contrib.auth.forms` pada `views.py`.
+2. Membuat file HTML `register.html` sebagai template halaman register user.
+3. Tambahkan path URL untuk halaman register ke dalam `urls.py`
+#### Login
+1. Membuat fungsi dan form untuk login dengan mengimpor `authenticate` dan `login`.
+```python
+from django.contrib.auth import authenticate, login
+```
+2. Membuat file HTML `login.html` sebagai template halaman login user.
+3. Tambahkan path URL untuk halaman login ke dalam `urls.py`
+#### Logout
+1. Membuat fungsi dan form untuk logout dengan mengimpor `logout`. Fungsi ini berfungsi untuk membawa user kembali ke halaman login.
+```python
+from django.contrib.auth import logout
+```
+2. Tambahkan path URL untuk halaman logout ke dalam `urls.py`
+#### Restriksi Halaman Main
+1. Pada `views.py`, import `login_required`
+```python
+from django.contrib.auth.decorators import login_required
+```
+2. Setelah itu, tambahkan _decorator_ pada fungsi `show_main` agar halaman Main hanya dapat diakses oleh user yang sudah login (terautentikasi).
+```python
+...
+@login_required(login_url='/login')
+def show_main(request):
+...
+```
+
+### Membuat akun dan input dummy data
+1. Masuk ke halaman `http://localhost:8000/register`, kemudian daftarkan username dan password sesuai dengan syarat yang ditentukan.
+2. Login menggunakan akun yang sudah didaftarkan.
+3. Setelah berhasil login, klik _button_ **Add New Item** dan isi form dengan data yang ingin diinput. Kemudian klik **Add Item**.
+4. Ulangi langkah-langkah tersebut untuk akun dummy yang lain.
+
+### Menghubungkan model Item dengan User
+1. Pada `models.py`, _import_ model `User`.
+```python
+from django.contrib.auth.models import User
+```
+2. Pada model `Item`, tambahkan atribut berikut untuk menghubungkan satu produk dengan satu user melalui sebuah relationship, dimana sebuah item pasti terasosiasikan dengan seorang user.
+```python
+class Item(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    ...
+```
+3. Pada file `views.py`, modifikasi fungsi `create_item` menjadi sebagai berikut
+```python
+def create_item(request):
+ form = ItemForm(request.POST or None)
+
+ if form.is_valid() and request.method == "POST":
+     item = form.save(commit=False)
+     item.user = request.user
+     item.save()
+     return HttpResponseRedirect(reverse('main:show_main'))
+ ...
+```
+4. Ubah juga fungsi `show_main` menjadi sebagai berikut.
+```python
+def show_main(request):
+    items = Item.objects.filter(user=request.user)
+
+    context = {
+        'name': request.user.username,
+    ...
+```
+5. Setelah itu, lakukan migrasi untuk menyimpan semua perubahan pada model.
+
+### Tampilan detail informasi user dan penerapan cookies
+1. Untuk menampilkan detail informasi pengguna yang sedang logged in seperti username, ubah fungsi `show_main` menjadi seperti berikut.
+```python
+def show_main(request):
+    items = Item.objects.filter(user=request.user)
+
+    context = {
+        'name': request.user.username,
+    ...
+```
+2. Implementasi cookies yang dilakukan adalah dengan menampilkan informasi last login yang disimpan pada cookies.
+3. Pada `views.py`, import `datetime`
+4. Kemudian, pada fungsi `login_user`, tambahkan _cookie_ yang bernama `last_login` dengan cara menambahkan bagian kode berikut.
+```python
+...
+if user is not None:
+    login(request, user)
+    response = HttpResponseRedirect(reverse("main:show_main")) 
+    response.set_cookie('last_login', str(datetime.datetime.now()))
+    return response
+...
+```
+5. Ubah juga fungsi `logout_user` menjadi berikut untuk menghapus _cookie_ ketika user telah logout.
+```python
+def logout_user(request):
+    logout(request)
+    response = HttpResponseRedirect(reverse('main:login'))
+    response.delete_cookie('last_login')
+    return response
+```
+6. Setelah itu, tambahkan informasi cookies ke dalam variabel `context` pada fungsi `show_main`.
+```python
+context = {
+    'name': 'Pak Bepe',
+    'class': 'PBP A',
+    'products': products,
+    'last_login': request.COOKIES['last_login'],
+}
+```
+7. Tambahkan bagian berikut pada `main.html` untuk menampilkan informasi `last_login` yang ada pada variable `context`.
+```python
+...
+<h5>Sesi terakhir login: {{ last_login }}</h5>
+...
+```
