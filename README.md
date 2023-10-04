@@ -479,6 +479,13 @@ Kode di atas berfungsi untuk mengubah warna teks menjadi hitam pada semua elemen
 - `<a>` : untuk menambahkan **_link_** ke halaman web lain, file, atau lokasi di halaman web yang sama.
 - `<img>` : untuk menampilkan gambar.
 - `<button>` : untuk membuat tombol interaktif dengan fungsi yang dapat dikustomisasi.
+- `<form>` : untuk membuat formulir.
+- `<input>`: menambahkan elemen input ke dalam formulir.
+- `<table>` : membuat tabel
+- `<ul>` : membuat list yang tidak memiliki urutan (**_unordered list_**)
+- `<ol>` : membuat list yang memiliki urutan (**_ordered list_**)
+- `<li>` : untuk menambahkan item pada list
+- `<body>` : Berisi konten utama dokumen.
 
 ## Margin dan padding
 1. **Margin**
