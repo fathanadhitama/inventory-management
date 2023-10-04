@@ -1,19 +1,64 @@
 {% extends 'base.html' %} 
-
+{% block meta %}
+    <title>Create New Item</title>
+    <style>
+        @media(min-width:640px){
+            .container{
+                box-shadow: 0px 0px 10px 10px #d6bd1996;
+            }
+        }
+        .image{
+            width: 40%;
+        }
+    </style>
+{% endblock meta %}
 {% block content %}
-<h1>Add New Item</h1>
-
-<form method="POST">
-    {% csrf_token %}
-    <table>
-        {{ form.as_table }}
-        <tr>
-            <td></td>
-            <td>
-                <input type="submit" value="Add Item"/>
-            </td>
-        </tr>
-    </table>
-</form>
+<div class="container mx-auto md:my-10 rounded-xl flex justify-center">
+    <div class = "create bg-white w-3/4 md:w-full rounded-xl py-10 md:px-10 flex flex-col gap-5">
+        <div class="flex justify-between md:px-10 w-full">
+            <h1 class="text-xl p-2"><span class="text-yellow-500">Manage</span>.it</h1>
+            <a href="{% url 'main:show_main' %}" class="text-md flex items-center gap-2 bg-black text-yellow-200 px-2 rounded-xl 
+            hover:bg-yellow-300 hover:text-black hover:cursor-pointer">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M18.75 19.5l-7.5-7.5 7.5-7.5m-6 15L5.25 12l7.5-7.5" />
+            </svg>
+            <p class="hidden md:block">Back to Main</p>
+        </a>
+    </div>
+    <h3 class="text-4xl mb-3 text-center">Add your new item!</h3>
+        <div class="outer flex justify-center max-h-full">
+            <div class="form-wrapper md:p-10 flex flex-col items-center gap-5 w-full lg:w-1/2">
+                    <form method="POST" class="flex flex-col lg:grid lg:grid-cols-2 gap-5 w-full">
+                        {% csrf_token %}
+                        {% for field in form %}
+                            <div class="flex flex-col">
+                                {{field.label_tag}}
+                                {{field}}
+                            </div>
+                        {% endfor %}
+                        <input class="btn login_btn bg-black text-yellow-200 p-2 rounded-xl 
+                        hover:bg-yellow-300 hover:text-black hover:cursor-pointer col-start-1 col-end-3"
+                        type="submit" value="Add Item">
+                    </form>
+            
+                {% if messages %}  
+                    <ul>   
+                        {% for message in messages %}  
+                            <li class="text-center text-red-600">{{ message }}</li>  
+                            {% endfor %}  
+                    </ul>   
+                {% endif %}
+            </div>
+            <div class="image lg:flex items-center hidden">
+                <img src="../static/images/new_item_yellow.png" alt="">
+            </div>
+        </div>
+    </div>  
+    <!-- <div class="aside bg-green-200 w-1/2 rounded-r-xl hidden md:flex flex-col justify-center items-center
+    p-10 ">
+        <h1 class="font-bold text-4xl">Welcome, managers!</h1>
+        <img src="../static/images/data-removebg-preview.png" alt="">
+    </div> -->
+</div>
 
 {% endblock %}

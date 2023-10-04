@@ -5,88 +5,93 @@
     Home
 </title>
 <style>
-    table{
-        border: 1px solid black;
-        border-collapse: collapse;
+    .top-bg{
+        border-radius: 0 0 25% 25%;
     }
 
-    th,td{
-        padding: 0.2rem;
-        max-width: 200px;
-        word-wrap: break-word;
-        border: 1px solid black;
-        text-align: center;
+    .cards:last-child{
+        background-color:  rgba(254, 243, 199, 1);
     }
 
-    .edit{
-        display: flex;
-        justify-content: space-between;
-        margin-bottom: 5px;
+    .items{
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
     }
 </style>
 {% endblock meta %}
 
 {% block content %}
-    <h1>Manage.it</h1>
+    <div class="top-bg h-3/4 md:h-2/4 w-full fixed" style="background-color: black;">
+    </div>
+    <div class="wrapper relative w-full px-10 text-white">
+        <nav class="flex justify-between items-center p-5 ">
+            <a href="{% url 'main:show_main' %}" class="text-3xl"><span class="text-yellow-300">Manage</span>.it</a>
+            <h1 class="text-2xl hidden md:block bg-yellow-100 rounded-2xl py-2 px-10 text-black">{{nama}}  —  {{kelas}}</h1>
+            <div class="buttons flex gap-2 items-center">
+                <a href="{% url 'main:create_item' %}" class="border-2 text-xl p-2 hover:bg-yellow-100 hover:text-black">
+                    Add New Item
+                </a>
+                <a href="{% url 'main:logout' %}" class="text-xl p-2 border-2 border-transparent hover:bg-red-600  hover:border-red-600">
+                    Logout
+                </a>
+            </div>
+        </nav>
 
-    <h5>Name: </h5>
-    <p>{{nama}}</p>
-    <h5>Class: </h5>
-    <p>{{kelas}}</p>
+        <section class="greets flex flex-col md:flex-row md:justify-between gap-10 items-center px-5 py-10 mb-10">
+            <h1 class="text-4xl">
+                Welcome back, {{nama}}.<br>Let's start manage your inventories.
+            </h1>
+            <div>
+                <h2 class="text-2xl">You have <span class="text-yellow-500">{{items.count}}</span> items stored.</h2>
+                <hr>
+                <h5>Last seen: {{ last_login }}</h5>
+            </div>
+        </section>
 
-    <h2>Anda memiliki {{items.count}} item di gudang.</h2>
-    <table>
-        <tr>
-            <th>Name</th>
-            <th>Category</th>
-            <th>Amount</th>
-            <th>Price</th>
-            <th>Description</th>
-            <th>Option</th>
-        </tr>
-
-        {% for item in items %}
-            <tr>
-                <td>{{item.name}}</td>
-                <td>{{item.category}}</td>
-                <td>{{item.amount}}</td>
-                <td>{{item.price}}</td>
-                <td>{{item.description}}</td>
-                <td>
-                    <div class="edit">
-                        <button onclick="location.href='{% url 'main:add_amount' item.id %}'">
-                            +
-                        </button>
-                        {% if item.amount == 0 %}
-                        <button onclick="location.href='{% url 'main:reduce_amount' item.id %}'" disabled>
-                            -
-                        </button>
-                        {% else %}
-                        <button onclick="location.href='{% url 'main:reduce_amount' item.id %}'">
-                            -
-                        </button>
-                        {% endif %}
-                    </div>
-                    <button onclick="location.href='{% url 'main:delete' item.id %}'">
-                        Delete
+        <section class="content w-full md:w-3/4 bg-white shadow-2xl mx-auto rounded-xl  p-5
+        text-black">
+        <h3 class="text-center text-xl p-4 rounded-xl bg-black text-white">Item Lists</h3>
+        <div class="items mt-10 gap-4">
+            {% for item in items %}    
+            <div class="cards border-2 rounded-xl p-3">
+                <div class="top flex justify-between">
+                    <p class="border-l-4 p-2 w-3/4 border-blue-800 rounded">{{item.name}}</p>
+                    <button class="rounded-full border-2 p-2 hover:bg-red-600 hover:text-white">
+                        <a href="{% url 'main:delete' item.id %}" class="w-full">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" />
+                              </svg>                          
+                        </a>
                     </button>
-                </td>
-            </tr>
-        {% endfor %}
-    </table>
-
-    <br />
-    <h5>Sesi terakhir login: {{ last_login }}</h5>
-
-    <a href="{% url 'main:create_item' %}">
-        <button>
-            Add New Item
-        </button>
-    </a>
-
-    <a href="{% url 'main:logout' %}">
-        <button>
-            Logout
-        </button>
-    </a>
+                </div>
+                <p class="category text-sm my-3 text-gray-400">{{item.category}}</p>
+                <div class="amount flex justify-around items-center my-3">
+                    {% if item.amount == 0 %}
+                            <a href="{% url 'main:reduce_amount' item.id %}" class="p-2 rounded-full border-2 text-gray-400">
+                                -
+                            </a>
+                    {% else %}
+                            <a href="{% url 'main:reduce_amount' item.id %}"
+                            class="p-2 rounded-full border-2 hover:bg-gray-200">
+                                -
+                            </a>
+                    {% endif %}
+                    <p>{{item.amount}}</p>
+                        <a href="{% url 'main:add_amount' item.id %}"
+                        class="p-2 rounded-full border-2 hover:bg-gray-200">
+                            +
+                        </a>                  
+                </div>
+                <div class="desc p-2 my-3">
+                    <p class="text-center underline mb-2">Description</p>
+                    <p class="text-sm text-center text-gray-400">
+                        {{item.description}}
+                    </p>
+                </div>
+                <p class="price text-center text-md">IDR {{item.price}}</p>
+            </div>
+            {% endfor %}
+        </div>
+        </section>
+    </div>
 {% endblock content %}

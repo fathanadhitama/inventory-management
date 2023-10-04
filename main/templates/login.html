@@ -2,43 +2,51 @@
 
 {% block meta %}
     <title>Login</title>
+    <style>
+        /* body{
+            background-color: black;
+        } */
+        *{
+            box-sizing: border-box;
+        }
+        .container{
+            box-shadow: 0px 0px 10px 10px #d6bd1996;
+        }
+    </style>
 {% endblock meta %}
 
 {% block content %}
 
-<div class = "login">
+<div class="container mx-auto rounded-xl my-10 flex justify-center">
 
-    <h1>Login</h1>
-
-    <form method="POST" action="">
-        {% csrf_token %}
-        <table>
-            <tr>
-                <td>Username: </td>
-                <td><input type="text" name="username" placeholder="Username" class="form-control"></td>
-            </tr>
-                    
-            <tr>
-                <td>Password: </td>
-                <td><input type="password" name="password" placeholder="Password" class="form-control"></td>
-            </tr>
-
-            <tr>
-                <td></td>
-                <td><input class="btn login_btn" type="submit" value="Login"></td>
-            </tr>
-        </table>
-    </form>
-
-    {% if messages %}
-        <ul>
-            {% for message in messages %}
-                <li>{{ message }}</li>
-            {% endfor %}
-        </ul>
-    {% endif %}     
+    <div class="login bg-white w-3/4 md:w-1/2 rounded-l-xl py-10 md:px-10 flex flex-col">
+        <h1 class="text-xl mb-10"><span class="text-yellow-500">Manage</span>.it</h1>
+        <div class="form-wrapper p-10 flex flex-col items-center gap-5">
+            <h3 class="text-4xl mb-10">Sign in to your account</h3>
+            <form method="POST" action="" class="flex flex-col gap-10 w-full md:w-3/4">
+                {% csrf_token %}
+                <input type="text" name="username" placeholder="Username" class="form-control bg-gray-200 rounded-xl  border-none">
+                <input type="password" name="password" placeholder="Password" class="form-control bg-gray-200 rounded-xl border-none">
+                <input class="btn login_btn bg-black text-yellow-200 p-2 rounded-xl hover:bg-yellow-300 hover:text-black hover:cursor-pointer" type="submit" value="Login">
+            </form>
+            <h3>Don't have an account yet?</h3> 
+            <a href="{% url 'main:register' %}" class="text-yellow-500 hover:underline">Register Now</a>
+        </div>
         
-    Don't have an account yet? <a href="{% url 'main:register' %}">Register Now</a>
+            {% if messages %}
+                <ul>
+                    {% for message in messages %}
+                        <li class="text-center text-red-600">{{ message }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}     
+    </div>
+    <div class="aside bg-black w-1/2 rounded-r-xl hidden md:flex flex-col justify-center items-center
+    p-10 ">
+        <h1 class="font-bold text-4xl text-yellow-500">Welcome, managers!</h1>
+        <img src="../static/images/co-work.png" alt="">
+    </div>
+        
 
 </div>
 

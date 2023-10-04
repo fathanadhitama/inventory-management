@@ -72,7 +72,7 @@ def login_user(request):
         if user is not None:
             login(request, user)
             response = HttpResponseRedirect(reverse("main:show_main")) 
-            response.set_cookie('last_login', str(datetime.datetime.now()))
+            response.set_cookie('last_login', str(datetime.datetime.now()).split()[0])
             return response
         else:
             messages.info(request, 'Sorry, incorrect username or password. Please try again.')
@@ -100,7 +100,8 @@ def add_amount(request, id):
 
 def reduce_amount(request, id):
     item = Item.objects.filter(pk=id).first()
-    item.amount-=1
+    if(item.amount > 0):
+        item.amount-=1
     item.save()
 
     return redirect('main:show_main')

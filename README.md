@@ -7,6 +7,7 @@
 - **[Tugas 2](#tugas-2)**<br>
 - **[Tugas 3](#tugas-3)**<br>
 - **[Tugas 4](#tugas-4)**<br>
+- **[Tugas 5](#tugas-5)**<br>
 
 ***
 # Tugas 2
@@ -455,3 +456,59 @@ context = {
 <h5>Sesi terakhir login: {{ last_login }}</h5>
 ...
 ```
+
+***
+
+# Tugas 5
+
+## Element selector
+**_Element selector_** adalah salah satu jenis _selector_ yang digunakan untuk memilih semua elemen HTML berdasarkan jenis elemennya atau HTML tag-nya. **_Element selector_** tepat digunakan pada CSS ketika kita ingin menerapkan suatu _styling_ terhadap semua elemen HTML dengan jenis/tag tertentu.
+Misal:
+
+```CSS
+   p{
+      color: black;
+   }
+```
+
+Kode di atas berfungsi untuk mengubah warna teks menjadi hitam pada semua elemen `<p>`.
+
+## HTML5 Tags
+- `<h1>` : untuk menulis Heading/Judul dengan tingkat yang paling tinggi.
+- `<p>` : untuk membuat teks dalam bentuk paragraf.
+- `<a>` : untuk menambahkan **_link_** ke halaman web lain, file, atau lokasi di halaman web yang sama.
+- `<img>` : untuk menampilkan gambar.
+- `<button>` : untuk membuat tombol interaktif dengan fungsi yang dapat dikustomisasi.
+
+## Margin dan padding
+1. **Margin**
+- Margin adalah ruang di sekitar elemen HTML yang terletak di luar batas elemen tersebut.
+- Margin berfungsi untuk mengatur jarak suatu elemen dengan elemen lain dalam suatu _container_ yang lebih besar.
+- Margin tidak memiliki latar belakang atau warna.
+
+2. __Padding__
+- Padding adalah ruang di sekitar konten elemen HTML di dalam batas elemen tersebut.
+- Padding berfungsi untuk mengatur jarak antara batas/_border_ elemen HTML dengan konten di dalamnya.
+- Padding memiliki warna yang sesuai dengan elemen.
+
+## Tailwind dan Bootstrap 
+
+| Perbedaan | Tailwind | Bootstrap |
+|--|--|--|
+| Pendekatan design | **_Utility-based_**, tidak menyediakan komponen siap pakai | **_Component-based_**, menyediakan komponen siap pakai dengan desain yang sudah diberikan secara default |
+| Kustomisasi | Lebih fleksibel karena tidak terdapat tema bawaan | Menggunakan tema bawaan, sehingga kustomisasinya terbatas jika ingin menggunakan desain yang berbeda dengan tema bawaan Bootstrap |
+| Ukuran file | Dirancang untuk lebih ringan, namun ukuran file juga dapat meningkat ketika class utility yang digunakan juga semakin banyak | Lebih besar dalam hal ukuran file karena menyediakan banyak fitur dan komponen yang siap pakai |
+| Kesulitan penggunaan | Tailwind memerlukan pengetahuan tentang basic CSS untuk memahami penggunaan _class-utility_ yang disediakan | Bootstrap lebih mudah untuk digunakan oleh pemula karena menyediakan komponen siap pakai |
+
+Bootstrap lebih baik digunakan untuk proyek yang membutuhkan pengembangan yang cepat dengan komponen siap pakai.
+Tailwind cocok digunakan untuk proyek yang membutuhkan kontrol desain yang lebih besar dan fleksibel dalam mengatur tampilan elemen.
+
+## Implementasi checklist
+
+1. Instalasi CSS Framework
+Pada proyek ini, saya menggunakan CSS Framework Tailwind sehingga saya perlu menginstall `django-tailwind`.
+2. Kustomisasi halaman login, register, dan add inventory dengan menerapkan CSS pada form yang terdapat dalam halaman tersebut.
+3. Kustomisasi halaman daftar inventori dengan menambahkan `Card` untuk menampilkan setiap item yang disimpan
+
+## Bonus
+Menggunakan **_pseudo-class_** `:last-child` untuk melakukan select terhadap kelas `.cards` terakhir kemudian menambahkan `background-color` yang berbeda.
