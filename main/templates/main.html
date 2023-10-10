@@ -21,8 +21,53 @@
 {% endblock meta %}
 
 {% block content %}
+    <!-- BACKGROUND -->
     <div class="top-bg h-3/4 md:h-2/4 w-full fixed" style="background-color: black;">
     </div>
+
+    <!-- MODAL -->
+    <div class="modal fixed hidden w-full h-full bg-black z-20 bg-opacity-50 flex justify-center items-center">
+        <div class="modal-wrapper bg-white rounded-xl h-full w-full md:w-1/2 md:min-h-3/4 p-10 relative">
+            <h3 class="text-2xl mb-3 text-center">Add your new item!</h3>
+            <button onclick="modalToggle()" class="absolute top-5 right-5 p-1 
+            border-2 border-black rounded-xl hover:bg-red-600 hover:text-white"> 
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+            </button>
+            <div class="modal-form flex justify-center">
+                <form method="POST" id="form" class="flex flex-col gap-5 w-full  md:w-3/4">
+                    {% csrf_token %}
+                    <div class="input flex flex-col gap-2">
+                        <label for="name">Name</label>
+                        <input type="text" name="name" id="" class="rounded-xl">
+                    </div>
+                    <div class="input flex flex-col gap-2">
+                        <label for="amount">Amount</label>
+                        <input type="number" name="amount" id="" class="rounded-xl">
+                    </div>
+                    <div class="input flex flex-col gap-2">
+                        <label for="category">Category</label>
+                        <input type="text" name="category" id="" class="rounded-xl">
+                    </div>
+                    <div class="input flex flex-col gap-2">
+                        <label for="price">Price</label>
+                        <input type="number" name="price" id="" class="rounded-xl">
+                    </div>
+                    <div class="input flex flex-col gap-2">
+                        <label for="description">Description</label>
+                        <textarea name="description" id="" cols="30" rows="5"
+                        class="rounded-xl resize-none"></textarea>
+                    </div>
+                    <input class="btn login_btn bg-black text-yellow-200 p-2 rounded-xl 
+                    hover:bg-yellow-300 hover:text-black hover:cursor-pointer col-start-1 col-end-3"
+                    type="submit" value="Add Item" onclick="addItem()">
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <!-- CONTENT -->
     <div class="wrapper relative w-full px-10 text-white">
         <nav class="flex justify-between items-center p-5 ">
             <a href="{% url 'main:show_main' %}" class="text-3xl"><span class="text-yellow-300">Manage</span>.it</a>
@@ -44,54 +89,99 @@
             <div>
                 <h2 class="text-2xl">You have <span class="text-yellow-500">{{items.count}}</span> items stored.</h2>
                 <hr>
-                <h5>Last seen: {{ last_login }}</h5>
+                <h5>Last login: {{ last_login }}</h5>
             </div>
         </section>
 
         <section class="content w-full md:w-3/4 bg-white shadow-2xl mx-auto rounded-xl  p-5
         text-black">
-        <h3 class="text-center text-xl p-4 rounded-xl bg-black text-white">Item Lists</h3>
+        <div class="content-header flex gap-2">
+            <h3 class="text-center text-xl p-4 rounded-xl bg-black text-yellow-300 w-10/12">Item Lists</h3>
+            <button id="modal-toggle" onclick="modalToggle()"
+             class="rounded-xl bg-yellow-300 hover:bg-black hover:text-yellow-300 w-2/12">Add Item by AJAX</button>
+        </div>
         <div class="items mt-10 gap-4">
-            {% for item in items %}    
-            <div class="cards border-2 rounded-xl p-3">
-                <div class="top flex justify-between">
-                    <p class="border-l-4 p-2 w-3/4 border-blue-800 rounded">{{item.name}}</p>
-                    <button class="rounded-full border-2 p-2 hover:bg-red-600 hover:text-white">
-                        <a href="{% url 'main:delete' item.id %}" class="w-full">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" />
-                              </svg>                          
-                        </a>
-                    </button>
-                </div>
-                <p class="category text-sm my-3 text-gray-400">{{item.category}}</p>
-                <div class="amount flex justify-around items-center my-3">
-                    {% if item.amount == 0 %}
-                            <a href="{% url 'main:reduce_amount' item.id %}" class="p-2 rounded-full border-2 text-gray-400">
-                                -
-                            </a>
-                    {% else %}
-                            <a href="{% url 'main:reduce_amount' item.id %}"
-                            class="p-2 rounded-full border-2 hover:bg-gray-200">
-                                -
-                            </a>
-                    {% endif %}
-                    <p>{{item.amount}}</p>
-                        <a href="{% url 'main:add_amount' item.id %}"
-                        class="p-2 rounded-full border-2 hover:bg-gray-200">
-                            +
-                        </a>                  
-                </div>
-                <div class="desc p-2 my-3">
-                    <p class="text-center underline mb-2">Description</p>
-                    <p class="text-sm text-center text-gray-400">
-                        {{item.description}}
-                    </p>
-                </div>
-                <p class="price text-center text-md">IDR {{item.price}}</p>
-            </div>
-            {% endfor %}
+            <!-- ITEMS TO BE FILLED HERE -->
         </div>
         </section>
     </div>
+
+    <!-- JAVASCRIPT -->
+    <script>
+        async function getItems(){
+            return fetch("{% url 'main:get_item' %}").then( res => res.json())
+        }
+
+        async function refreshItems(){
+            const content = document.querySelector('.items')
+            content.innerHTML = ""
+            const items = await getItems()
+            let htmlString = ``;
+            items.forEach((item) => {
+                htmlString += `<div class="cards border-2 rounded-xl p-3">
+                <div class="top flex justify-between">
+                    <p class="border-l-4 p-2 w-3/4 border-blue-800 rounded">${item.fields.name}</p>
+                    <button class="rounded-full border-2 p-2 hover:bg-red-600 hover:text-white">
+                        <a href="delete/${item.pk}" class="w-full">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" />
+                            </svg>                          
+                        </a>
+                    </button>
+                </div>
+                <p class="category text-sm my-3 text-gray-400">${item.fields.category}</p>
+                <div class="amount flex justify-around items-center my-3">`
+                if(item.fields.amount == 0){
+                    htmlString += 
+                        `<a class="p-2 rounded-full border-2
+                        text-gray-400 cursor-not-allowed">
+                                -
+                        </a>`
+                }else{
+                    htmlString += 
+                        `<a href="reduce-amount/${item.pk}"
+                        class="p-2 rounded-full border-2 hover:bg-gray-200">
+                            -
+                        </a>`
+                }
+                htmlString += `
+                        <p>${item.fields.amount}</p>
+                        <a href="add-amount/${item.pk}"
+                        class="p-2 rounded-full border-2 hover:bg-gray-200">
+                            +
+                        </a>                  
+                    </div>
+                    <div class="desc p-2 my-3">
+                        <p class="text-center underline mb-2">Description</p>
+                        <p class="text-sm text-center text-gray-400">
+                            ${item.fields.description}
+                        </p>
+                    </div>
+                    <p class="price text-center text-md">IDR ${item.fields.price}</p>
+                </div>
+                `
+            })
+            content.innerHTML = htmlString
+        }
+
+        refreshItems();
+
+        const modal = document.querySelector('.modal')
+        function modalToggle(){
+            modal.classList.toggle('hidden')
+            document.getElementById("form").reset()
+        }
+
+        function addItem() {
+            fetch("{% url 'main:add_item_ajax' %}", {
+                method: "POST",
+                body: new FormData(document.querySelector('#form'))
+            }).then(refreshItems)
+
+            document.getElementById("form").reset()
+            return false
+        }
+    </script>
 {% endblock content %}
+
+

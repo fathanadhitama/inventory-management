@@ -8,6 +8,7 @@
 - **[Tugas 3](#tugas-3)**<br>
 - **[Tugas 4](#tugas-4)**<br>
 - **[Tugas 5](#tugas-5)**<br>
+- **[Tugas 6](#tugas-6)**<br>
 
 ***
 # Tugas 2
@@ -519,3 +520,152 @@ Pada proyek ini, saya menggunakan CSS Framework Tailwind sehingga saya perlu men
 
 ## Bonus
 Menggunakan **_pseudo-class_** `:last-child` untuk melakukan select terhadap kelas `.cards` terakhir kemudian menambahkan `background-color` yang berbeda.
+
+*** 
+
+# Tugas 6
+
+## Synchronous & Asynchronous Programming
+
+- Asynchronous programming merupakan sebuah pendekatan pemrograman yang tidak terikat pada input output (I/O)  protocol. Asynchronous programming melakukan pekerjaannya tanpa harus terikat dengan proses lain atau dapat kita sebut secara **_Independent_**.
+- Sedangkan synchronous programming akan mengeksekusi task satu persatu sesuai dengan urutan dan prioritas task. Hal ini memiliki kekurangan pada lama waktu eksekusi karena masing-masing task harus menunggu task lain selesai untuk diproses terlebih dahulu.
+
+## Event-driven programming
+_Event-driven programming_ adalah salah satu teknik _programming_ yang konsep kerja dan alur programnya bergantung kepada terjadinya suatu _event_ tertentu. Salah satu contoh paradigma tersebut pada tugas ini adalah munculnya `modal` ketika terjadi event `click` pada suatu button tertentu.
+```HTML
+<!-- Implementasi pada HTML (atribut onclick) -->
+<button id="modal-toggle" onclick="modalToggle()"
+class="rounded-xl bg-yellow-300 hover:bg-black hover:text-yellow-300 w-2/12">
+   Add Item by AJAX
+</button>
+```
+```js
+// Implementasi pada Javascript (fungsi modalToggle())
+const modal = document.querySelector('.modal')
+function modalToggle(){
+   modal.classList.toggle('hidden')
+   document.getElementById("form").reset()
+}
+```
+
+## Asynchronous pada AJAX
+
+- Request asynchronous pada AJAX memungkinkan JavaScript untuk mengirim permintaan tetapi tidak harus menunggu respons. JavaScript dapat terus menjalankan tugas lain sehingga halaman tetap responsif sementara respons sedang diproses.
+
+- AJAX membuat halaman web memperbarui data secara asinkronus dengan mengirimkan data ke server di balik layar, artinya kita dapat memperbarui sebagian elemen data pada halaman tanpa harus me-reload keseluruhan halaman.
+
+- Berikut adalah langkah-langkahnya:
+1. Sebuah event terjadi pada halaman web (contohnya tombol submit data ditekan)
+2. Sebuah XMLHttpRequest object dibuat oleh JavaScript
+3. XMLHttpRequest object mengirimkan request ke server
+4. Server memproses request tersebut
+5. Server mengembalikan response kembali kepada halaman web
+6. Response dibaca oleh JavaScript
+7. Aksi berikutnya akan dipicu oleh JavaScript sesuai dengan langkah yang dibuat (contohnya memperbarui data di halaman tersebut)
+
+- Kita juga bisa melakukan AJAX pada web browser dengan menggunakan fungsi fetch() yang diberikan oleh JavaScript. Fetch API merupakan API baru yang diperkenalkan pada ECMAScript 2020 sebagai standar baru untuk membuat request dengan `Promise`
+
+## Fetch API dan jQuery
+
+| Perbedaan | Fetch API | jQuery |
+|--|--|--|
+| Dependency | Native JavaScript, tidak memerlukan library tambahan | Memerlukan pengunduhan dan penggunaan library jQuery itu sendiri. |
+| Performance | Lebih ringan karena tidak memiliki fitur-fitur tambahan yang ada di jQuery.| Lebih berat karena fitur-fitur tambahannya. |
+| Syntax | **_Promise-based_**, menggunakan `.then()` dan `.catch()` untuk menangani `response` dan `error` | Syntax yang lebih pendek dan mudah digunakan untuk membuat permintaan AJAX |
+| Keunggulan lain | Fetch API adalah standar web yang **lebih modern** | Dapat menangani perbedaan yang kompleks dalam implementasi JavaScript pada berbagai browser (**_Cross-browser compatibility_**). |
+
+Secara garis besar, menurut saya Fetch API merupakan teknologi yang lebih baik untuk digunakan dalam penerapan AJAX karena beberapa keunggulannya yaitu lebih modern, lebih ringan, dan tidak bergantung pada library tambahan.
+
+## Implementasi Checklist
+
+### AJAX GET
+1. Buat fungsi untuk mendapatkan data berupa JSON pada `views.py`
+```py
+def get_item_json(request):
+    items = Item.objects.filter(user=request.user)
+    return HttpResponse(serializers.serialize('json', items))
+```
+2. Tambahkan path untuk fungsi tersebut pada `urls.py`
+```py
+urlpatterns = [
+    ...
+    path('get-item/', get_item_json, name="get_item"),
+    ...
+]
+```
+3. Pada file `main.html` hapus syntax for loop yang sebelumnya digunakan untuk menampilkan cards
+```html
+<div class="items mt-10 gap-4">
+   <!-- ITEMS TO BE FILLED HERE -->
+</div>
+```
+4. Tampilkan data Items menggunakan Fetch API pada block `<script>`.
+```html
+<script>
+   async function getItems(){
+      return fetch("{% url 'main:get_item' %}").then( res => res.json())
+   }
+   ...
+</script>
+```
+5. Buat fungsi baru bernama `refreshItems()` untuk me-refresh Items secara **_asynchronous_**.
+
+### AJAX POST
+1. Buat sebuah tombol yang membuka sebuah modal dengan form untuk menambahkan item.
+```HTML
+<!-- Implementasi pada HTML (atribut onclick) -->
+<button id="modal-toggle" onclick="modalToggle()"
+class="rounded-xl bg-yellow-300 hover:bg-black hover:text-yellow-300 w-2/12">
+   Add Item by AJAX
+</button>
+```
+```js
+// Implementasi pada Javascript (fungsi modalToggle())
+const modal = document.querySelector('.modal')
+function modalToggle(){
+   modal.classList.toggle('hidden')
+   document.getElementById("form").reset()
+}
+```
+
+2. Membuat fungsi pada `views.py` untuk menambahkan item baru dari ke dalam basis data.
+3. Tambahkan path untuk fungsi tersebut pada `urls.py`.
+```py
+urlpatterns = [
+    ...,
+    path('create-ajax/', add_item_ajax, name="add_item_ajax"),
+]
+```
+4. Menghubungkan form dengan path `create-ajax/` pada saat tombol submit diklik.
+```html
+<input class="btn login_btn bg-black text-yellow-200 p-2 rounded-xl 
+hover:bg-yellow-300 hover:text-black hover:cursor-pointer col-start-1 col-end-3"
+type="submit" value="Add Item" onclick="addItem()">
+```
+5. Implementasi fungsi `addItem()` pada javascript untuk mengakses path `create-ajax/` dan merefresh halaman.
+```js
+function addItem() {
+   fetch("{% url 'main:add_item_ajax' %}", {
+         method: "POST",
+         body: new FormData(document.querySelector('#form'))
+   }).then(refreshItems)
+
+   document.getElementById("form").reset()
+   return false
+}
+```
+
+### Melakukan perintah `collectstatic`
+1. Pada root folder, buat folder baru bernama `staticfiles`
+2. Pada `settings.py`, lakukan `import os` dan tambahkan variabel berikut.
+```py
+# Static files (CSS, JavaScript, Images)
+# https://docs.djangoproject.com/en/4.2/howto/static-files/
+
+STATIC_URL = 'static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+```
+3. Jalankan perintah berikut pada terminal.
+```
+py manage.py collectstatic
+```

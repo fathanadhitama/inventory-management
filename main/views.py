@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.http import HttpResponseRedirect, HttpResponse
+from django.http import HttpResponseNotFound, HttpResponseRedirect, HttpResponse
 from main.forms import ItemForm
 from django.urls import reverse
 from .models import Item
@@ -12,6 +12,7 @@ from django.contrib.auth.decorators import login_required
 import datetime
 from django.http import HttpResponseRedirect
 from django.urls import reverse
+from django.views.decorators.csrf import csrf_exempt
 # Create your views here.
 
 @login_required(login_url='/login')
@@ -105,3 +106,31 @@ def reduce_amount(request, id):
     item.save()
 
     return redirect('main:show_main')
+
+def get_item_json(request):
+    items = Item.objects.filter(user=request.user)
+    return HttpResponse(serializers.serialize('json', items))
+
+@csrf_exempt
+def add_item_ajax(request):
+    if request.method == 'POST':
+        name = request.POST.get("name")
+        price = request.POST.get("price")
+        description = request.POST.get("description")
+        category = request.POST.get("category")
+        amount = request.POST.get("amount")
+        user = request.user
+
+        new_item = Item(
+            name=name, 
+            price=price, 
+            description=description, 
+            user=user,
+            category=category,
+            amount =amount,
+            )
+        new_item.save()
+
+        return HttpResponse(b"CREATED", status=201)
+
+    return HttpResponseNotFound()
