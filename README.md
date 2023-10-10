@@ -1,7 +1,7 @@
 # Manage.it
 > Manage.it is a web application for shops to manage their sellings, records every transaction, look up shop's statistics and many more. This app is built with django
 
-> You can access the app on [https://manage-it.adaptable.app/main/](https://manage-it.adaptable.app/main/)
+> You can access the app on [this link](http://fathan-naufal-tugas.pbp.cs.ui.ac.id.)
 
 ### Documentation:
 - **[Tugas 2](#tugas-2)**<br>
