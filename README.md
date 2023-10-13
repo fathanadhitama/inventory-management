@@ -669,3 +669,31 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 ```
 py manage.py collectstatic
 ```
+
+### [Bonus] Menambahkan DELETE menggunakan AJAX
+1. Membuat fungsi untuk melakukan delete pada `views.py`
+```py
+@csrf_exempt
+def delete_item_ajax(request, id):
+    if request.method == 'DELETE':
+        item = Item.objects.get(pk=id)
+        item.delete()
+
+        return HttpResponse(b"REMOVED", status=200)
+    return HttpResponseNotFound()
+```
+2. Menambahkan path untuk fungsi `delete_item_ajax` pada `urls.py`
+3. Membuat fungsi pada `<script>` untuk melakukan delete item.
+```js
+function deleteItem(id) {
+   fetch(`delete-ajax/${id}`, {
+         method: "DELETE"
+   }).then(refreshItems)
+
+   return false
+}
+```
+4. Menambahkan fungsi `onclick` pada button delete item untuk menjalankan fungsi `deleteItem`.
+```html
+<button class="rounded-full border-2 p-2 hover:bg-red-600 hover:text-white" onclick="deleteItem(${item.pk})">
+```
