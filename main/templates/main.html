@@ -87,7 +87,7 @@
                 Welcome back, {{nama}}.<br>Let's start manage your inventories.
             </h1>
             <div>
-                <h2 class="text-2xl">You have <span class="text-yellow-500">{{items.count}}</span> items stored.</h2>
+                <h2 class="text-2xl">You have <span class="text-yellow-500" id="total-item">{{items.count}}</span> items stored.</h2>
                 <hr>
                 <h5>Last login: {{ last_login }}</h5>
             </div>
@@ -162,6 +162,7 @@
                 `
             })
             content.innerHTML = htmlString
+            document.getElementById('total-item').textContent = items.length
         }
 
         refreshItems();
